@@ -1,9 +1,4 @@
 
-#ADD config.json /root/dasher/config.json
-
-# Interface the environment
-#VOLUME /root/dasher/config
-
 # Baseimage init process
 #CMD cd /root/dasher && cp -n config.json /root/dasher/config/config.json  && npm run start
 
@@ -28,6 +23,7 @@ RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
 
 WORKDIR /root/dasher
 RUN cd /root/dasher && npm install
+ADD config.json /root/dasher/config.json
 
 # Interface the environment
 VOLUME /root/dasher/config

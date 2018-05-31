@@ -1,18 +1,25 @@
-FROM   ubuntu:latest
-MAINTAINER	Clemens Putschli <clemens@putschli.de>
+
+#ADD config.json /root/dasher/config.json
+
+# Interface the environment
+#VOLUME /root/dasher/config
+
+# Baseimage init process
+#CMD cd /root/dasher && cp -n config.json /root/dasher/config/config.json  && npm run start
+
+
+FROM   arm32v7/ubuntu:latest
+MAINTAINER	Ronny Elflein <ronny@11lein.de>
 
 #Install libpcap-dev
-RUN \
-    sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-    apt-get update && \
+RUN apt-get -y update && \
     apt-get -y upgrade && \
-     apt-get install -y sudo && \
-    apt-get install -y libpcap-dev && \
-    apt-get install -y git && \
-    apt-get install -y nodejs && \
-    apt-get install -y npm && \
-    apt-get install nodejs-legacy && \ 
+    apt-get install -y nodejs npm git wget libpcap-dev && \ 
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+#update node needed for <RPi3
+RUN wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+RUN dpkg -i node_latest_armhf.deb
 
 #install dasher
 RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
@@ -21,10 +28,9 @@ RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
 
 WORKDIR /root/dasher
 RUN cd /root/dasher && npm install
-ADD config.json /root/dasher/config.json
 
 # Interface the environment
 VOLUME /root/dasher/config
 
 # Baseimage init process
-CMD cd /root/dasher && cp -n config.json /root/dasher/config/config.json  && npm run start
+CMD cd /root/dasher && npm run start

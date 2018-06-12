@@ -1,5 +1,5 @@
 FROM   arm32v7/ubuntu:latest
-MAINTAINER	Ronny Elflein <ronny@11lein.de>
+LABEL maintainer="Ronny Elflein <ronny@11lein.de>"
 
 # Baseimage init process
 #CMD cd /root/dasher && cp -n config.json /root/dasher/config/config.json  && npm run start
@@ -19,12 +19,13 @@ RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
     git config --global http.sslVerify false && \
     git clone https://github.com/maddox/dasher.git
 
-WORKDIR /root/dasher
-RUN cd /root/dasher && npm install
-ADD config.json /root/dasher/config.json
+#WORKDIR /root/dasher
+#RUN cd /root/dasher && npm install
+#ADD config.json /root/dasher/config.json
 
 # Interface the environment
-VOLUME /root/dasher/config
+#VOLUME /root/dasher/config
 
 # Baseimage init process
-CMD cd /root/dasher && npm run start
+CMD cd /root/dasher 
+# && npm run start

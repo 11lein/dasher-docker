@@ -1,15 +1,13 @@
+FROM   arm32v7/ubuntu:latest
+MAINTAINER	Ronny Elflein <ronny@11lein.de>
 
 # Baseimage init process
 #CMD cd /root/dasher && cp -n config.json /root/dasher/config/config.json  && npm run start
 
-
-FROM   arm32v7/ubuntu:latest
-MAINTAINER	Ronny Elflein <ronny@11lein.de>
-
 #Install libpcap-dev
 RUN apt-get -y update && \
     apt-get -y upgrade && \
-    apt-get install -y nodejs npm git wget libpcap-dev && \ 
+    apt-get install -y nodejs npm git wget libpcap-dev sudo  && \ 
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 #update node needed for <RPi3

@@ -1,4 +1,4 @@
-FROM   arm32v7/node:8
+FROM  node:8
 LABEL maintainer="Ronny Elflein <ronny@11lein.de>"
 
 #Install libpcap-dev

@@ -2,11 +2,13 @@
 
 A docker file for a dasher installation on a rpi to control a e.g. squeezebox server on a max2play.
 
-I had a RaspberryPi3 with a Max2Play Image (https://www.max2play.com/) with LMS (SqueezeBox Server) and Jivelite to run a small office web and spotify radio. It can be easily controlled by WebUI or several apps. But when I was about to left the office, I always noticed that I have forgot to turn off the radio. Powering the Computer back on seems not to be a very smart solution. A IoT Button next to the door should do the trick. I read something about hacking amazons dash button and the 5 € you will get back with first order.
+I had a RaspberryPi3 (rpi) with a Max2Play Image (https://www.max2play.com/) with LMS (SqueezeBox Server) and Jivelite to run a small office web and spotify radio. It can be easily controlled by WebUI or several apps. But when I was about to left the office, I always noticed that I have forgot to turn off the radio. Powering the Computer back on seems not to be a very smart solution. A IoT Button next to the door should do the trick. I read something about hacking amazons dash button and the 5 € you will get back with first order.
+
+I found maddox/dasher on GitHub, but it's a little bit outdated and will not run with the current node version. While trying to get it to work, I have messed everthing up and the radio player client stopped working caused by the downgraded node version. I had Docker on my bucket list and it seems predestined for the job. I am totally newbie to this topic and I will be thankful for any advice.
 
 ## Required hardware
 
-* RaspberryPi with a Rasbian derivat (e.g. Max2Play)
+* RaspberryPi2/3/+ with a Rasbian derivat (e.g. Max2Play)
 * Amazon Dash Button*
 
 *) Buy one for a product you need at least one time, setup it up as intended and place your order. Remove the button in the Amazon App and set it up as described below.
@@ -15,6 +17,47 @@ I had a RaspberryPi3 with a Max2Play Image (https://www.max2play.com/) with LMS 
 
 * docker
 * dasher: https://github.com/maddox/dasher
+
+## Setup
+
+You'll want to set up your Dash buttons as well as Dasher.
+
+### Dash button
+
+Setting up your Dash button is as simple as following the instructions provided
+by Amazon **EXCEPT FOR THE LAST STEP**. Just follow the instructions to set it
+up in their mobile app. When you get to the step where it asks you to pick which
+product you want to map it to, just quit the setup process.
+
+The button will be set up and available on your network.
+
+Here are few protips about Dash buttons that will help you plan how to use them.
+
+* Dash buttons take ~5 seconds to trigger your action.
+* Use DHCP Reservation on your Dash button to lower the latency from ~5s to ~1s.
+* Dash buttons are discrete buttons. There is no on or off. They just do a
+single command.
+* Dash buttons can not be used for another ~10 seconds after they've been pressed.
+
+Dash buttons should be used to trigger specific things. I.E. a scene in
+your home automation, as a way to turn everything off in your house, or
+as a simple counter.
+
+### Setup Docker on RPi
+
+Connect to your RPi via ssh and run `curl -sSL https://get.docker.com | sh`. See output, if you are not a root user, you can add your user to the docker group with e.g `sudo usermod -aG docker pi` but you have to log out and back in to take effekt.
+
+Test if it works with
+`docker info`
+
+### Get and setup my dasher docker image
+
+```
+mkdir dasher-config
+docker pull r11lein/dasher-docker-rpi
+docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/init
+```
+
 
 docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/init
 
@@ -102,19 +145,7 @@ HTTP request you need to make.
 
 You can find more examples in the [example config](/config/config.example.json).
 
-## Protips
 
-Here are few protips about Dash buttons that will help you plan how to use them.
-
-* Dash buttons take ~5 seconds to trigger your action.
-* Use DHCP Reservation on your Dash button to lower the latency from ~5s to ~1s.
-* Dash buttons are discrete buttons. There is no on or off. They just do a
-single command.
-* Dash buttons can not be used for another ~10 seconds after they've been pressed.
-
-Dash buttons should be used to trigger specific things. I.E. a scene in
-your home automation, as a way to turn everything off in your house, or
-as a simple counter.
 
 ## Setup
 

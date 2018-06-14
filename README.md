@@ -1,8 +1,30 @@
-# dasher-docker
-#
-a docker file for a dasher installation. 
+# dasher-docker-rpi
 
-dasher: https://github.com/maddox/dasher
+A docker file for a dasher installation on a rpi to control a e.g. squeezebox server on a max2play.
+
+I had a RaspberryPi3 with a Max2Play Image (https://www.max2play.com/) with LMS (SqueezeBox Server) and Jivelite to run a small office web and spotify radio. It can be easily controlled by WebUI or several apps. But when I was about to left the office, I always noticed that I have forgot to turn off the radio. Powering the Computer back on seems not to be a very smart solution. A IoT Button next to the door should do the trick. I read something about hacking amazons dash button and the 5 € you will get back with first order.
+
+## Required hardware
+
+* RaspberryPi with a Rasbian derivat (e.g. Max2Play)
+* Amazon Dash Button*
+
+*) Buy one for a product you need at least one time, setup it up as intended and place your order. Remove the button in the Amazon App and set it up as described below.
+
+## Required software
+
+* docker
+* dasher: https://github.com/maddox/dasher
+
+docker run --rm -it --net host -v "$(pwd)"/dasher-config:/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi
+
+docker run --rm -it --net host -v $(pwd)/dasher-config:/root/dasher-docker/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/find_button
+
+docker build -t r11lein/dasher-docker-rpi ../dasher-docker-rpi/
+
+docker run --rm -it --net host -v $(pwd)/dasher-config:/root/dasher-docker/config --name dasher-docker-rpi r11lein/dasher-docker-rpi
+
+If you build from Dockerfile just ignore the node-gyp errors.
 
 # Dasher!!
 

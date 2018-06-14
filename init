@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+echo "Copy Files to Host..."
+
+cp -a /root/dasher/config/* config/
+
+script/find_button

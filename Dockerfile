@@ -1,12 +1,9 @@
-FROM  resin/raspberry-pi-alpine-node:8-slim
+FROM  resin/raspberry-pi-alpine-node:8
 LABEL maintainer="Ronny Elflein <ronny@11lein.de>"
 
 #Install libpcap-dev
-RUN apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get install -y git libpcap-dev wget sudo  && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk update && apk upgrade &&\
+    apk add git libpcap-dev wget sudo
 
 #install dasher
 RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
@@ -23,4 +20,4 @@ RUN npm install
 VOLUME /root/docker-dasher/config
 
 # Baseimage init process
-CMD cp -rn /root/dasher/config/* config/ &&  npm run start
+CMD cp -a /root/dasher/config/* config/ &&  npm run start

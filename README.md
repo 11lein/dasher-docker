@@ -16,6 +16,9 @@ I had a RaspberryPi3 with a Max2Play Image (https://www.max2play.com/) with LMS 
 * docker
 * dasher: https://github.com/maddox/dasher
 
+docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/init
+
+
 docker run --rm -it --net host -v "$(pwd)"/dasher-config:/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi
 
 docker run --rm -it --net host -v $(pwd)/dasher-config:/root/dasher-docker/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/find_button

@@ -25,4 +25,4 @@ RUN npm install
 VOLUME /root/docker-dasher/config
 
 # Baseimage init process
-CMD cp -r /root/dasher/config/* config/ && npm run start
+CMD npm run start

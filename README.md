@@ -68,17 +68,25 @@ docker info
 
 ### Get the image and setup dasher-docker
 
-if you have a RPi2 or RPi3
+If you have a RPi version 1
 
 ```bash
-docker pull r11lein/dasher-docker-rpi
+docker pull r11lein/dasher-docker-rpi:RPi1
 ```
 
-Copy config files to host and start find_button script with
+If you have a RPi2 or RPi3 like me. Further examples will have this `:RPi3` tag on the image. You'll have to change it when you a Version 1 Pi.
+
+```bash
+docker pull r11lein/dasher-docker-rpi:RPi3
+```
+
+This will take some minutes, grab a coffee. ☕
+
+Copy config files to host and start `find_button` script with
 
 ```bash
 mkdir dasher-config
-docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/init
+docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi:RPi3 script/init
 ```
 
 We looking for the MAC address of your Dash button. Press your button and look for it. Should be something with "Amazon..." or in my case "unknown". My network was quite noisy for arp messages. You can press your button twice or more times to verify but keep in mind, you have to wait 10 seconds between. Hit `CTRL + C` to stop the docker container.
@@ -104,6 +112,64 @@ Possible dash hardware address detected: 4c:9e:ff:80:7f:22 Manufacturer: ZyXEL C
 </pre>
 
 Alternatively you can just look in your routers DHCP table.
+
+Open `~/dasher-config/config.json` with a editor of your choice and edit the MAC to yours and the url to your needs. Further config and multiple buttons can found below or in the `~/dasher-config/config.examble.json`
+
+e.g.
+
+```Bash
+nano dasher-config/config.json
+```
+
+```JSON
+{"buttons":[
+  {
+    "name": "Finish Radio",
+    "address": "fc:65:de:75:d1:57",
+    "url": "http://max2play:9000/status.html?p0=pause",
+    "method": "GET"
+  }
+]}
+```
+
+If you just need to run the scan/find script again.
+
+```bash
+docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi:RPi3 script/find_button
+```
+
+### Testing
+
+```Bash
+docker run --rm -it --net host -v "$(pwd)"/dasher-config:/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi:RPi3
+```
+
+```Log
+> dasher@1.4.1 start /root/docker-dasher
+> node app.js
+
+[2018-06-15T13:53:50.133Z] Finish Radio added.
+[2018-06-15T13:54:09.858Z] Finish Radio pressed. Count: 1
+```
+
+The last line should appear when you push your button and everything is setup correctly. `STRG + C` will stop the container again.
+
+### Run Forever
+
+docker run -d --restart unless-stopped --net host -v "$(pwd)"/dasher-config:/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi:RPi3
+
+After a reboot of your Pi a `docker ps` should look like this.
+
+```
+CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS               NAMES
+f18c8a4f6f81        r11lein/dasher-docker-rpi:RPi3   "/bin/sh -c 'npm run…"   5 minutes ago       Up 2 seconds                            dasher-docker-rpi
+```
+
+#
+
+#
+
+#
 
 docker run --rm -it --net host --mount type=bind,src="$(pwd)"/dasher-config,dst=/root/docker-dasher/config --name dasher-docker-rpi r11lein/dasher-docker-rpi script/init
 

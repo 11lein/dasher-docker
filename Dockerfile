@@ -7,7 +7,6 @@ RUN apt-get -y update && \
     apt-get install -y git libpcap-dev wget sudo && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
 #install dasher
 RUN cd /root && export GIT_SSL_NO_VERIFY=1 && \
     git config --global http.sslVerify false && \

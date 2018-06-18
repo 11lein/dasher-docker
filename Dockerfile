@@ -1,3 +1,4 @@
+# rpi1 und x64
 FROM  hypriot/rpi-node:8
 LABEL maintainer="Ronny Elflein <ronny@11lein.de>"
 

@@ -4,7 +4,7 @@ LABEL maintainer="Ronny Elflein <ronny@11lein.de>"
 
 #Install libpcap-dev
 RUN apt-get -y update && \
-    apt-get -y upgrade &&\
+    apt-get -y upgrade && \
     apt-get install -y git libpcap-dev wget sudo && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
